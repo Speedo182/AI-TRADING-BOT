@@ -1,0 +1,44 @@
+import os
+import subprocess
+
+# function to install required libraries
+def install_libraries():
+    os.system("pip install ccxt")
+    os.system("pip install pandas")
+    os.system("pip install numpy")
+    os.system("pip install scikit-learn")
+    os.system("pip install matplotlib")
+    os.system("pip install talib")
+    os.system("pip install requests")
+    os.system("pip install beautifulsoup4")
+    os.system("pip install vaderSentiment")
+
+# function to set up Telegram
+def set_up_telegram():
+    # prompt user for Telegram bot token and channel ID
+    bot_token = input("Enter Telegram bot token: ")
+    channel_id = input("Enter Telegram channel ID: ")
+    # write Telegram bot token and channel ID to config file
+    with open("config.txt", "w") as config_file:
+        config_file.write("TELEGRAM_BOT_TOKEN=" + bot_token + "\n")
+        config_file.write("TELEGRAM_CHANNEL_ID=" + channel_id + "\n")
+
+# function to set up exchange API keys
+def set_up_exchange_api_keys():
+    # prompt user for API keys for each exchange
+    binance_api_key = input("Enter Binance API key: ")
+    binance_secret_key = input("Enter Binance secret key: ")
+    # write API keys to config file
+    with open("config.txt", "a") as config_file:
+        config_file.write("BINANCE_API_KEY=" + binance_api_key + "\n")
+        config_file.write("BINANCE_SECRET_KEY=" + binance_secret_key + "\n")
+
+# main function to run the script
+def main():
+    install_libraries()
+    set_up_telegram()
+    set_up_exchange_api_keys()
+    print("Setup complete.")
+
+if __name__ == "__main__":
+    main()
