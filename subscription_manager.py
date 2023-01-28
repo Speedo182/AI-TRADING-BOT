@@ -1,7 +1,23 @@
 import stripe
+import login
 
-stripe.api_key = "YOUR_STRIPE_SECRET_KEY"
+stripe.api_key = "YOUR_STRIPE_API_KEY"
 
+def check_subscription():
+    if not login.is_logged_in():
+        print("You must be logged in to access this feature.")
+        login.prompt_login()
+    else:
+        # Check if the user has a valid subscription
+        user = login.get_logged_in_user()
+        customer = stripe.Customer.retrieve(user["stripe_customer_id"])
+        if customer["subscription"]["status"] != "active":
+            print("Your subscription is not active. Please renew your subscription.")
+            subscription_manager.prompt_renewal()
+        else:
+            # User has a valid subscription, allow access to bot's signals and functionality
+            pass
+)         
 # create the subscription plan
 plan = stripe.Plan.create(
   amount=2999,
