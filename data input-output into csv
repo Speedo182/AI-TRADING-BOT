@@ -1,0 +1,25 @@
+Here is the full code for a data input/output file that can handle reading and writing data to/from a CSV file using Pandas:
+
+Ask ChatGPT for the name of this file for the code below:
+
+import pandas as pd
+
+def read_data(file_path):
+    """Reads data from a CSV file and returns it as a DataFrame.
+
+    Args:
+        file_path (str): The path of the CSV file.
+
+    Returns:
+        pd.DataFrame: The data in the CSV file.
+    """
+    return pd.read_csv(file_path)
+
+def write_data(data, file_path):
+    """Writes data to a CSV file.
+
+    Args:
+        data (pd.DataFrame): The data to be written.
+        file_path (str): The path of the CSV file.
+    """
+    data.to_csv(file_path, index=False)
