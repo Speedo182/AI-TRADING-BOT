@@ -74,7 +74,7 @@ server.login(email_address, email_password)
 server.sendmail(email_address, recipient_email, message)
 server.quit()
 
-create a schedule to run the function every 14 days
+# create a schedule to run the function every 14 days
 schedule.every(14).days.do(clean_telegram_group)
 while True:
 schedule.run_pending()
