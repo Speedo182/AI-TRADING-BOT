@@ -1,30 +1,41 @@
-import telegram
-from telegram.ext import Updater, CommandHandler
-import signals_generator
-import config
+import os
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import ReplyKeyboardMarkup
+import requests
+import json
 
-def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to Crypto Signals Bot. Send /help for more information.")
+# Define the Telegram bot
+def start(bot, update):
+    update.message.reply_text("Hello! I am your trading bot. How can I assist you today?")
 
-def help(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="This bot sends the buy and sell signals for the top 20 crypto coins (excluding stablecoins) with a margin from x5 to x100. Send /signals to receive the signals.")
+def signals(bot, update, args):
+    # Get the stock symbol from the user's message
+    symbol = args[0]
+    # Make an API call to get the stock data
+    url = f'https://financialmodelingprep.com/api/v3/stock/real-time-price/{symbol}'
+    response = requests.get(url)
+    data = response.json()
+    # Get the current price and change
+    price = data['price']
+    change = data['change']
+    # Check if the change is positive or negative
+    if change > 0:
+        update.message.reply_text(f'{symbol} is currently trading at {price} and is up {change}.')
+    else:
+        update.message.reply_text(f'{symbol} is currently trading at {price} and is down {change}.')
 
-def signals(update, context):
-    coin_list = ["BTC", "ETH", "XRP", "LTC", "BCH", "BNB", "EOS", "BSV", "XLM", "ADA", "TRX", "LINK", "DOT", "XTZ", "YFI", "AAVE", "UNI", "DOGE", "SUSHI", "CRV"]
-    signals = signals_generator.generate_signals(coin_list)
-    message = "Signals:\n"
-    for coin, signal in signals.items():
-        message += f"{coin}: {signal}\n"
-    context.bot.send_message(chat_id=update.effective_chat.id, text=message)
-
-if __name__ == "__main__":
-    token = config.telegram_token
-    updater = Updater(token=token, use_context=True)
+def main():
+    # Get the Telegram API key
+    TELEGRAM_API_KEY = os.environ['TELEGRAM_API_KEY']
+    # Create the Telegram bot
+    updater = Updater(TELEGRAM_API_KEY)
     dp = updater.dispatcher
-
+    # Add the command handlers
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("signals", signals))
-
+    dp.add_handler(CommandHandler("signals", signals, pass_args=True))
+    # Start the bot
     updater.start_polling()
     updater.idle()
+
+if __name__ == '__main__':
+    main()
