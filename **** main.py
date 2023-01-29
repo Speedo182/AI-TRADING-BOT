@@ -1,3 +1,10 @@
+#Note that you will need to replace 'YOUR_TOKEN' with your actual Telegram bot token for this code to work. 
+Also note that this code assumes that you have already imported the necessary libraries (e.g. pandas, matplotlib, etc.) and 
+have properly set up your python environment.
+
+
+
+
 import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import ReplyKeyboardMarkup
